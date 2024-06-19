@@ -1,0 +1,14 @@
+initULpwr = -40
+for i in range(abs(initULpwr)+23):
+    
+    ULpwr = initULpwr + i
+    print("UL power is: " + str(ULpwr))
+    cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer 'NR1',"+str(ULpwr))
+    cmw.ask("CONFigure:SIGNaling:NRADio:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer? 'NR1'")
+    time.sleep(1)
+
+time.sleep(1)    
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer 'NR1',-40")
+#print("UL power is: -40")
+
+time.ctime()

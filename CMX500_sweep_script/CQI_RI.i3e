@@ -1,0 +1,11 @@
+cmw.write("INIT:SIGNaling:MEASurement:CQIReporting")
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:STATe?")
+
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:TRACe:LTE:CWORd1?")
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:TRACe:NRADio:CWORd1?")
+
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:LTE:CWORd1?")
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:NRADio:CWORd1?")
+
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:TRACe:LTE:RI?")
+cmw.ask("FETCh:SIGNaling:MEASurement:CQIReporting:TRACe:NRADio:RI?")

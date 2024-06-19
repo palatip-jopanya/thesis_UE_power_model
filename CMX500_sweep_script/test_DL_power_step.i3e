@@ -1,0 +1,13 @@
+initDLpwr = -17
+interval = 5
+for i in range(34):
+    time.sleep(interval)
+    DLpwr = initDLpwr - i
+    print("DL power is: " + str(DLpwr))
+    cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:DL:TCELl 'NR1',"+str(DLpwr))
+
+time.sleep(interval)    
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:DL:TCELl 'NR1',-17")
+print("DL power is: -17")
+
+time.clock()

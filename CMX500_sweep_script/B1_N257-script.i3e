@@ -1,0 +1,145 @@
+#Init
+cmw=cmx
+
+cmw.write("SOURce:SIGNaling:TOPology:CNETwork:ENABle OFF")
+cmw.write("DELete:SIGNaling:TOPology:CNETwork")
+cmw.write("*RST")
+cmw.ask("*OPC?")
+cmw.write("*CLS")
+cmw.ask("*OPC?")
+cmw.ask("*IDN?")
+
+# Wait for reset
+a = 0
+while a == 0:
+    if cmw.ask("FETCh:SIGNaling:TOPology:CNETwork:STATe?") != ['NAV']:
+        time.sleep(5)
+        a=0
+    else: 
+        a=1
+        time.sleep(5)
+        
+#Set Radiohead configuration to UL DL combination on port 1
+cmw.write("DIAGnostic:SIGNaling:ROUTing KEEP,KEEP,KEEP,CP1")
+
+#Load DUT Profile
+
+
+#cmx.query("CATalog:DUT?")   #Query List of DUT profiles
+cmx.write("ACTivate:DUT 'FR2_OTA'")
+
+#Configure path loss big chamber
+
+cmx.write("CRE:TENV:SPAT '1','LTE_Main','0.Slot5.RFCom1',1")
+cmx.write("CRE:TENV:SPAT '2','LTE_Div','0.Slot5.RFCom2',1")
+cmx.write("CRE:TENV:SPAT '3','NR_FR2_Main','0.Slot1.Port1.RRH.RF2',1")
+cmx.write("CRE:TENV:SPAT '4','NR_FR2_Div','0.Slot2.Port1.RRH.RF2',1")
+cmx.write("TENV:SPAT:CTAB:TX '1','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:RX '1','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:TX '2','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:RX '2','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:TX '3','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:RX '3','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:TX '4','FDC_30dB'")
+cmx.write("TENV:SPAT:CTAB:RX '4','FDC_30dB'")
+
+#Create core network
+a = 0
+while a == 0:
+    if cmw.ask("FETCh:SIGNaling:TOPology:CNETwork:STATe?") != ['NAV']:
+        time.sleep(5)
+        a=0
+    else: 
+        a=1
+        time.sleep(5)
+
+#Create core network
+cmw.write("CREate:SIGNaling:TOPology:CNETwork")
+
+#Wait until CNET is ready
+i = 0
+while i == 0:
+    if cmw.ask("FETCh:SIGNaling:TOPology:CNETwork:STATe?") != ['IDLE']:
+        time.sleep(1)
+        i=0
+    else: 
+        i=1
+        time.sleep(5)
+#Create PLMN, EPS tracking area 
+cmw.write("CREate:SIGNaling:TOPology:PLMN 'PLMN1'")
+cmw.write("CREate:SIGNaling:TOPology:EPS 'EPSTA1', 'PLMN1'")
+
+#Create cells and add them to EPS TA
+cmw.write("CREate:SIGNaling:LTE:CELL 'LTE1'")
+cmw.write("ADD:SIGNaling:TOPology:EPS 'EPSTA1', 'LTE1'")
+
+cmw.write("CREate:SIGNaling:NRADio:CELL 'NR1'")
+cmw.write("ADD:SIGNaling:TOPology:EPS 'EPSTA1', 'NR1'")
+
+
+#LTE1 cell config
+cmw.write("CONF:SIGNaling:LTE:CELL:RFSettings:BCHannel 'LTE1', 1, 300, B100, 18300, B100") #B1
+#cmw.write("CONF:SIGNaling:LTE:CELL:RFSettings:BCHannel 'LTE1', 5, 2525, B100, 20525, B100") #B5
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:UL:IPTPower 'LTE1', P90")
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:DL:RSEPre 'LTE1', -80")
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:DL:REFerence 'LTE1', 15")
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:UL:PUSCh:NOMinal 'LTE1', -107")
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:UL:ALPHa 'LTE1', A10")
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer 'LTE1', 0")
+
+#additional
+cmw.write("CONFigure:SIGNaling:LTE:CELL:SRS:MODE 'LTE1', A521") #SRS enabled 3GPP to reduce DTX in DL LTE
+
+
+#Debug, If you want to list NR cells
+#NrCellNameList = cmw.ask("CATalog:SIGNaling:NRADio:CELL?")
+
+#NR Cell Config
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:RFSettings:FRANge 'NR1', FR2")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:RFSettings:FBINdicator 'NR1', 257")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:RFSettings:DL:BWIDth 'NR1', B100")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:RFSettings:DL:APOint:LOCation 'NR1', MID")
+#cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:UL:PRTPower 'NR1', -86") #Bortkommenterad
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:DL:SEPRe 'NR1', -18.9")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:UL:RCMode 'NR1', USER")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:UL:MEEPre 'NR1', -49")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:MCONfig:MODulation 'NR1', Q64") #max UL mcs
+#cmw.write("CONFigure:SIGNaling:NRADio:CELL:BWP0:ASMode 'NR1', UECap") #BWP0 based on UE cap (initial BWP)cmw.ask("CONFigure:SIGNaling:NRADio:CELL:CSI:TRS:MODE 'NR1'")
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:CSI:TRS:MODE 'NR1', DEF")  #tracking reference signals (TRS), a variant of periodic CSI-RS  
+#cmw.write("CONFigure:SIGNaling:NRADio:CELL:SRS:CNCodebook:TDBehavior 'NR1', PERiodic") #enale periodic SRS in initial BWP
+#correct power downlink SSB so downlink NACK drop quickly
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:DL:TCELl 'NR1', -17")
+
+#set cases
+#cmw.write("CONFigure:SIGNaling:NRADio:CELL:UESCheduling:RMC:DL 'NR1', ON")
+#cmw.write("CONFigure:SIGNaling:NRADio:CELL:UESCheduling:UDEFined:DL:MCSTable 'NR1', Q256")
+#cmw.write("CONFigure:SIGNaling:NRADio:CELL:UESCheduling:UDEFined:UL:MCSTable 'NR1', Q256")
+#Set Serving Cell measurement reporting
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:ENABle ALL")
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:RINTerval I1")
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:RESult:ENABle ON, ON, ON")
+
+#Set NB cell measurement Reporting
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:NCELl:RESult:TYPE CNETwork")
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:NCELl:RESult:CNETwork ALL")
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:NCELl:RINTerval I1")
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:NCELl:RESult:ENABle ON, ON, ON")
+
+#Go Live with NW and turn on cells LTE1 and NR1
+cmw.write("SOURce:SIGNaling:TOPology:CNETwork:ENABle ON")
+j=0
+while j == 0:
+    if cmw.ask("FETCh:SIGNaling:TOPology:CNETwork:STATe?") != ['RUNN']:
+        time.sleep(1)
+        j=0
+    else: 
+        time.sleep(1)
+        j=1
+cmw.write("SOURce:SIGNaling:LTE:CELL:STATe 'LTE1', ON")
+cmw.write("SOURce:SIGNaling:NRADio:CELL:STATe 'NR1', ON")
+
+#Query Errors
+cmw.ask("SYST:ERR:ALL?")
+
+#cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:ENABle ALL")
+

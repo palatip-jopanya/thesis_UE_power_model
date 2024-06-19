@@ -1,0 +1,35 @@
+cmw.write("CONFigure:SIGNaling:MEASurement:BLER:ENABle ON, ON")
+cmw.write("CONFigure:SIGNaling:MEASurement:BLER:REPetition SINGleshot")
+cmw.write("INIT:SIGN:MEAS:BLER")
+#set start in power log
+cmw.write("CONFigure:SIGNaling:NRADio:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer 'NR1',0")
+cmw.ask("CONFigure:SIGNaling:NRADio:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer? 'NR1'")
+#interval = 5
+#initULpwr = -40
+#start = 0
+#stop = 1 # define round
+start = time.clock()
+
+while cmw.ask("FETCh:SIGN:MEAS:BLER:STATe?") <> "RUN":
+    print('%' + str(time.clock() - start)) #time stamp
+    #DL
+    cmw.ask("FETCh:SIGN:MEAS:BLER:ABSolute?") #received of 0, ACK, NACK, DTX,       ThroughputAVG *bps
+    cmw.ask("FETCh:SIGN:MEAS:BLER:RELative?") # in %       0, ACK, NACK, DTX, BLER, ThroughputAVG(%of schedule*==ACK)
+    #UL
+    cmw.ask("FETCh:SIGNaling:MEASurement:BLER:UL:ABSolute?") # cell name Failed, CRC pass, DTX
+    cmw.ask("FETCh:SIGNaling:MEASurement:BLER:UL:RELative?") # cell name Failed, CRC pass, DTX, BLER
+    cmw.ask("FETCh:SIGNaling:MEASurement:BLER:UL:THRoughput?") # cell name, %tph, tph avg bps, tph schedule bps
+    #power nmeasurement
+    cmw.ask("SENSe:DUT:MODem1:MEASurement:REPort?")
+    
+    #MCS index LTE
+    #cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:CWORd1:MCS? 'LTE1', 0")
+    #cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:UL:CWORd1:MCS? 'LTE1', 0")
+    #cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:ALL? 'LTE1'")
+    #cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:UL:ALL? 'LTE1'")
+
+    #MCS index NR
+    #cmw.ask("CONFigure:SIGNaling:NRADio:CELL:UESCheduling:UDEFined:SASSignment:DL:MCS? 'NR1', 1")
+    #cmw.ask("CONFigure:SIGNaling:NRADio:CELL:UESCheduling:UDEFined:SASSignment:UL:MCS? 'NR1', 4")
+
+

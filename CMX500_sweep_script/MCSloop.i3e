@@ -1,0 +1,19 @@
+#fetch lte mcs
+#cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:SPS:SASSignment:DL:MCS? 'LTE1'")
+#cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:ALL? 'LTE1'")
+cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:ALL? 'LTE1'")
+#cmw.write("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:CWORd1:MCS 'LTE1', 0, 10") #Subframe 0-9, MCSindex
+
+MCSdl = 19
+MCSul = 19
+pattern2 = 0
+pattern = [0,0,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2,1,1,1,1,1,1,1,0,2,2]
+for i in range(80):
+    i
+    if pattern[i]==1:
+        cmw.write("CONF:SIGN:NRAD:CELL:UESCheduling:UDEF:SASSignment:DL:MCS 'NR1',"+ str(i)+", "+str(MCSdl)+"")
+    elif pattern[i]==2:
+        cmw.write("CONF:SIGN:NRAD:CELL:UESCheduling:UDEF:SASSignment:UL:MCS 'NR1',"+ str(i)+", "+str(MCSul)+"")
+    else:
+        cmw.write("CONF:SIGN:NRAD:CELL:UESCheduling:UDEF:SASSignment:UL:ENABle 'NR1'," +str(i) +", OFF")
+        cmw.write("CONF:SIGN:NRAD:CELL:UESCheduling:UDEF:SASSignment:DL:ENABle 'NR1'," +str(i) +", OFF")

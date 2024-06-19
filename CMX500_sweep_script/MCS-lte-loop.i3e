@@ -1,0 +1,9 @@
+targetMCSDL = 27
+targetMCSUL = 28
+
+for i in range(10):
+    cmw.write("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:CWORd1:MCS 'LTE1', "+str(i)+","+str(targetMCSDL)+"")
+    cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:DL:CWORd1:MCS? 'LTE1', "+str(i)+"")
+    
+    cmw.write("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:UL:CWORd1:MCS 'LTE1', "+str(i)+","+str(targetMCSUL)+"")
+    cmw.ask("CONFigure:SIGNaling:LTE:CELL:UESCheduling:UDEFined:SASSignment:UL:CWORd1:MCS? 'LTE1', "+str(i)+"")

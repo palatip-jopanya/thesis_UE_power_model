@@ -1,0 +1,15 @@
+cmw.write("CONFigure:SIGNaling:MEASurement:UEReport:ENABle ALL")
+cmw.write("CONFigure:SIGNaling:MEASurement:BLER:ENABle ON, ON")
+cmw.write("CONFigure:SIGNaling:MEASurement:BLER:REPetition SINGleshot")
+cmw.write("INIT:SIGN:MEAS:BLER")
+#set start
+cmw.write("CONFigure:SIGNaling:LTE:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer 'LTE1', 0")
+cmw.ask("CONFigure:SIGNaling:LTE:CELL:POWer:CONTrol:TPControl:CLOop:TPOWer? 'LTE1'")
+start = time.clock()
+
+while cmw.ask("FETCh:SIGN:MEAS:BLER:STATe?") <> "RUN":
+    print('%' + str(time.clock() - start)) #time stamp
+    cmw.ask("FETCh:SIGN:MEAS:BLER:RELative?") #DL
+    cmw.ask("FETCh:SIGNaling:MEASurement:BLER:UL:THRoughput?") #UL
+    #power nmeasurement
+    cmw.ask("SENSe:DUT:MODem1:MEASurement:REPort?")
