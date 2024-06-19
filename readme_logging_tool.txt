@@ -2,7 +2,7 @@ A guide for logging tool
 # this tool is created for converting & combining power mesurement log and CMX500 log into CSV format.
 
 To run the tool:
-1. Collected both power measurement (HV Monsoon) and CMX500 logs using script (see scripts in folder CMX500_sweep_script)
+1. Collect both power measurement (HV Monsoon) and CMX500 logs using script (see scripts in folder CMX500_sweep_script)
 2. Run python file main.py in any python IDE.
 3. A first pop-up window for file selection: select CMX500 log (log from script execution in CMX500 i.e. .PCT)
 4. A second pop-up window for file selection: select power mesurement log (log from HV monsoon in CSV format)
